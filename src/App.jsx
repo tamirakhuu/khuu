@@ -452,21 +452,6 @@ export default function KhuuBrandWebsite() {
               Онлайн орчинд бүтээгдэхүүн танилцуулах, захиалга авах процессыг хялбарчлах зориулалттай storefront.
             </p>
           </div>
-          <div>
-            <h5 className="font-semibold">Системийн онцлог</h5>
-            <ul className="mt-3 space-y-2 text-sm text-slate-600">
-              <li>• Category filter</li>
-              <li>• Product search</li>
-              <li>• Cart + quantity update</li>
-              <li>• Order confirmation</li>
-            </ul>
-          </div>
-          <div>
-            <h5 className="font-semibold">Анхаарах зүйл</h5>
-            <p className="mt-3 text-sm leading-6 text-slate-600">
-              HTTPS нь hosting/deployment түвшинд тохируулагдана. Энэ frontend demo нь шаардлагатай UI/UX урсгалыг харуулж байна.
-            </p>
-          </div>
         </div>
       </footer>
 
