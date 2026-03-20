@@ -9,8 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import vestImg from"./assets/vest.png";
 import capImg from"./assets/cap.png";
 import hoodieImg from "./assets/hoodie.png";
-import jacketImg from ".assets/jacket.png";
-import tshirtImg from ".assets/tshirt.png";
+import jacketImg from "./assets/jacket.png";
+import tshirtImg from "./assets/tshirt.png";
 const PRODUCTS = [
   {
     id: 1,
@@ -24,7 +24,7 @@ const PRODUCTS = [
   },
   {
     id: 2,
-    name: "KHUU Street Tee",
+    name: "KHUU Oversize T-Shirt",
     category: "T-Shirt",
     price: 49000,
     size: ["S", "M", "L"],
