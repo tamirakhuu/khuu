@@ -15,7 +15,7 @@ const PRODUCTS = [
   {
     id: 1,
     name: "KHUU Hoodie",
-    category: "Hoodie",
+    category: "Hoodie, Outerwear",
     price: 89000,
     size: ["S", "M", "L", "XL"],
     stock: true,
