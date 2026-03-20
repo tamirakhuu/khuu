@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { ShoppingCart, Search, Trash2, User, LogIn, LogOut, Package, CheckCircle2, X, Menu } from "lucide-react";
+import { Instagram, Facebook, Mail,ShoppingCart, Search, Trash2, User, LogIn, LogOut, Package, CheckCircle2, X, Menu } from "lucide-react";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import vestImg from"./assets/vest.png";
 import capImg from"./assets/cap.png";
 import hoodieImg from "./assets/hoodie.png";
+
 const PRODUCTS = [
   {
     id: 1,
@@ -443,16 +445,54 @@ export default function KhuuBrandWebsite() {
         </section>
       </main>
 
-      <footer className="border-t bg-white">
-        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-3 lg:px-8">
-          <div>
-            <h4 className="text-xl font-black tracking-[0.25em]">KHUU</h4>
-            <p className="mt-3 text-sm leading-6 text-slate-600">
-              Онлайн орчинд бүтээгдэхүүн танилцуулах, захиалга авах процессыг хялбарчлах зориулалттай storefront.
-            </p>
-          </div>
-        </div>
-      </footer>
+<footer className="border-t bg-white">
+  <div className="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-3 lg:px-8">
+    
+    <div>
+      <h4 className="text-xl font-black tracking-[0.25em]">KHUU</h4>
+      <p className="mt-3 text-sm leading-6 text-slate-600">
+        Онлайн орчинд бүтээгдэхүүн танилцуулах, захиалга авах процессыг хялбарчлах зориулалттай storefront.
+      </p>
+    </div>
+
+    {/* Холбоо барих */}
+    <div>
+      <h5 className="font-semibold">Холбоо барих</h5>
+      <div className="mt-4 flex items-center gap-4">
+
+        {/* Instagram */}
+        <a
+          href="https://instagram.com/damn.docx"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-full p-3 transition hover:bg-black hover:text-white"
+        >
+          <Instagram className="h-5 w-5" />
+        </a>
+
+        {/* Facebook */}
+        <a
+          href="https://facebook.com/akultamira"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-full p-3 transition hover:bg-black hover:text-white"
+        >
+          <Facebook className="h-5 w-5" />
+        </a>
+
+        {/* Gmail */}
+        <a
+          href="mailto:tamirakhuu@gmail.com"
+          className="rounded-full p-3 transition hover:bg-black hover:text-white"
+        >
+          <Mail className="h-5 w-5" />
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+</footer>
 
       <Modal open={!!selectedProduct} onClose={() => setSelectedProduct(null)} wide>
         {selectedProduct && (
