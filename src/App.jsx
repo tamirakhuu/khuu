@@ -7,17 +7,16 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import vestImg from"./assets/vest.png";
 import capImg from"./assets/cap.png";
-
+import hoodieImg from "./assets/hoodide.png";
 const PRODUCTS = [
   {
     id: 1,
-    name: "KHUU Essential Hoodie",
+    name: "KHUU Hoodie",
     category: "Hoodie",
     price: 89000,
     size: ["S", "M", "L", "XL"],
     stock: true,
-    image:
-      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1200&q=80",
+    image: hoodieImg,
     description: "Өдөр тутмын minimal загвартай, тав тухтай oversize hoodie.",
   },
   {
@@ -65,7 +64,7 @@ const PRODUCTS = [
   },
   {
     id: 6,
-    name: "KHUU Basic Shorts",
+    name: "KHUU Basic Vest",
     category: "Outerwear",
     price: 59000,
     size: ["S", "M", "L"],
