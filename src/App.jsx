@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import vestImg from"./assets/vest.png";
 import capImg from"./assets/cap.png";
-import hoodieImg from "./assets/hoodide.png";
+import hoodieImg from "./assets/hoodie.png";
 const PRODUCTS = [
   {
     id: 1,
