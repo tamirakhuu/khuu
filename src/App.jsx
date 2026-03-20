@@ -9,7 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import vestImg from"./assets/vest.png";
 import capImg from"./assets/cap.png";
 import hoodieImg from "./assets/hoodie.png";
-
+import jacketImg from ".assets/jacket.png";
+import tshirtImg from ".assets/tshirt.png";
 const PRODUCTS = [
   {
     id: 1,
@@ -28,8 +29,7 @@ const PRODUCTS = [
     price: 49000,
     size: ["S", "M", "L"],
     stock: true,
-    image:
-      "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=1200&q=80",
+    image:tshirtImg,
     description: "Цэвэрхэн хэв маягтай, брендийн өдөр тутмын tee.",
   },
   {
@@ -60,9 +60,8 @@ const PRODUCTS = [
     price: 129000,
     size: ["M", "L", "XL"],
     stock: true,
-    image:
-      "https://images.unsplash.com/photo-1548883354-94bcfe321cbb?auto=format&fit=crop&w=1200&q=80",
-    description: "Салхины хамгаалалттай, хөнгөн материалтай хүрэм.",
+    image:jacketImg,
+    description: "Дулаан материалтай, загварлаг teddy.",
   },
   {
     id: 6,
@@ -451,7 +450,7 @@ export default function KhuuBrandWebsite() {
     <div>
       <h4 className="text-xl font-black tracking-[0.25em]">KHUU</h4>
       <p className="mt-3 text-sm leading-6 text-slate-600">
-        Онлайн орчинд бүтээгдэхүүн танилцуулах, захиалга авах процессыг хялбарчлах зориулалттай storefront.
+        Онлайн орчинд бүтээгдэхүүн танилцуулах, захиалга авах процессыг хялбарчлах зориулалттай website.
       </p>
     </div>
 
