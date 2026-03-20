@@ -5,8 +5,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import vestImg from"src/assets/vest.png";
-import capImg from"src/assets/cap/png";
+import vestImg from"./assets/vest.png";
+import capImg from"./assets/cap/png";
 
 const PRODUCTS = [
   {
