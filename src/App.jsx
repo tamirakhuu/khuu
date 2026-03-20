@@ -5,6 +5,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import vestImg from"src/assets/vest.png";
+import capImg from"src/assets/cap/png";
 
 const PRODUCTS = [
   {
@@ -47,9 +49,8 @@ const PRODUCTS = [
     price: 39000,
     size: ["Free"],
     stock: false,
-    image:
-      "https://images.unsplash.com/photo-1521369909029-2afed882baee?auto=format&fit=crop&w=1200&q=80",
-    description: "Энгийн, цэвэрхэн logo-той cap.",
+    image:capImg,
+    description: "Энгийн, цэвэрхэн logo-той cap.Хэмжээгээ өөрөө тааруулах боломжтой",
   },
   {
     id: 5,
@@ -65,13 +66,12 @@ const PRODUCTS = [
   {
     id: 6,
     name: "KHUU Basic Shorts",
-    category: "Pants",
+    category: "Outerwear",
     price: 59000,
     size: ["S", "M", "L"],
     stock: true,
-    image:
-      "https://images.unsplash.com/photo-1506629905607-d9c297d87f38?auto=format&fit=crop&w=1200&q=80",
-    description: "Зуны улиралд тохирсон comfy short.",
+    image: vestImg,
+    description: "Зуны улиралд тохирсон comfy хантааз.",
   },
 ];
 
