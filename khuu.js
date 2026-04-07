@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import cargoImg from "../assets/cargo.png";
+import cargo from "../assets/cargo.png";
 import hoodie from "./assets/hoodie.png";
 
 
@@ -38,7 +38,7 @@ const PRODUCTS = [
     price: 99000,
     size: ["M", "L", "XL"],
     stock: true,
-    image: cargoImg,
+    image: cargo,
     description: "Streetwear хэв маягтай олон халаастай cargo өмд.",
   },
   {
