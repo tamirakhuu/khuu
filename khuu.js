@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import cargoImg from "../assets/cargo.png";
+import hoodie from "./assets/hoodie.png";
+
 
 const PRODUCTS = [
   {
@@ -15,8 +17,7 @@ const PRODUCTS = [
     price: 89000,
     size: ["S", "M", "L", "XL"],
     stock: true,
-    image:
-      "/assets/hoodie.png",
+    image: hoodie,
     description: "Өдөр тутмын minimal загвартай, тав тухтай oversize hoodie.",
   },
   {
