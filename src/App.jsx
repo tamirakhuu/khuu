@@ -197,6 +197,11 @@ export default function KhuuBrandWebsite() {
   const [search, setSearch] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [mobileMenu, setMobileMenu] = useState(false);
+  const [selectedSize, setSelectedSize] = useState("");
+  const openProduct = (product) => {
+  setSelectedProduct(product);
+  setSelectedSize(product?.size?.[0] || "");
+};
 
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
@@ -288,12 +293,40 @@ export default function KhuuBrandWebsite() {
     ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const addToCart = (product) => {
-    if (!currentUser) {
-      setAuthMode("login");
-      setAuthOpen(true);
-      return;
+const addToCart = (product, chosenSize = "") => {
+  if (!currentUser) {
+    setAuthMode("login");
+    setAuthOpen(true);
+    return;
+  }
+
+  const finalSize = chosenSize || product?.size?.[0] || "";
+
+  setCart((prev) => {
+    const found = prev.find(
+      (item) => item.id === product.id && item.selectedSize === finalSize
+    );
+
+    if (found) {
+      return prev.map((item) =>
+        item.id === product.id && item.selectedSize === finalSize
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
     }
+
+    return [
+      ...prev,
+      {
+        ...product,
+        selectedSize: finalSize,
+        quantity: 1,
+      },
+    ];
+  });
+
+  setCartOpen(true);
+};
 
     setCart((prev) => {
       const found = prev.find((item) => item.id === product.id);
@@ -749,7 +782,7 @@ export default function KhuuBrandWebsite() {
               <ProductCard
                 key={product.id}
                 product={product}
-                onView={setSelectedProduct}
+                onView={openProduct}
                 onAdd={addToCart}
               />
             ))}
@@ -807,8 +840,14 @@ export default function KhuuBrandWebsite() {
         </div>
       </footer>
 
-      <Modal open={!!selectedProduct} onClose={() => setSelectedProduct(null)} wide>
-        {selectedProduct && (
+<Modal
+  open={!!selectedProduct}
+  onClose={() => {
+    setSelectedProduct(null);
+    setSelectedSize("");
+  }}
+  wide
+>        {selectedProduct && (
           <div className="grid gap-6 md:grid-cols-2">
             <div className="overflow-hidden rounded-3xl bg-slate-100">
               <img
@@ -828,22 +867,42 @@ export default function KhuuBrandWebsite() {
                   <span className="font-semibold">Үнэ:</span>{" "}
                   {formatPrice(selectedProduct.price)}
                 </p>
-                <p>
-                  <span className="font-semibold">Хэмжээ:</span>{" "}
-                  {selectedProduct.size.join(", ")}
-                </p>
+<div className="space-y-3">
+  <p>
+    <span className="font-semibold">Хэмжээ сонгох:</span>
+  </p>
+  <div className="flex flex-wrap gap-2">
+    {selectedProduct.size.map((size) => (
+      <button
+        key={size}
+        type="button"
+        onClick={() => setSelectedSize(size)}
+        className={`rounded-xl border px-4 py-2 text-sm font-medium transition ${
+          selectedSize === size
+            ? "border-slate-900 bg-slate-900 text-white"
+            : "border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
+        }`}
+      >
+        {size}
+      </button>
+    ))}
+  </div>
+  <p className="text-sm text-slate-500">
+    Сонгосон хэмжээ: <span className="font-semibold text-slate-900">{selectedSize}</span>
+  </p>
+</div>
                 <p>
                   <span className="font-semibold">Барааны төлөв:</span>{" "}
                   {selectedProduct.stock ? "Байгаа" : "Одоогоор дууссан"}
                 </p>
               </div>
-              <Button
-                className="rounded-2xl"
-                disabled={!selectedProduct.stock}
-                onClick={() => addToCart(selectedProduct)}
-              >
-                Сагсанд нэмэх
-              </Button>
+<Button
+  className="rounded-2xl"
+  disabled={!selectedProduct.stock || !selectedSize}
+  onClick={() => addToCart(selectedProduct, selectedSize)}
+>
+  Сагсанд нэмэх
+</Button>
             </div>
           </div>
         )}
@@ -1014,6 +1073,7 @@ export default function KhuuBrandWebsite() {
                   <div className="flex-1">
                     <h4 className="font-semibold">{item.name}</h4>
                     <p className="text-sm text-slate-500">{item.category}</p>
+                    <p className="text-sm text-slate-500">Хэмжээ: {item.selectedSize || "-"}</p>
                     <p className="mt-1 font-bold">{formatPrice(item.price)}</p>
                   </div>
                   <div className="flex items-center gap-2">
