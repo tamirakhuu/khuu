@@ -118,8 +118,7 @@ function Modal({ open, onClose, children, wide = false }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
-          onClick={onClose}
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 p-4 overflow-y-auto"          onClick={onClose}
         >
           <motion.div
             initial={{ opacity: 0, y: 16, scale: 0.98 }}
@@ -127,8 +126,8 @@ function Modal({ open, onClose, children, wide = false }) {
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.2 }}
             className={`relative w-full ${
-              wide ? "max-w-4xl" : "max-w-md"
-            } rounded-3xl bg-white p-6 shadow-2xl`}
+            wide ? "max-w-4xl" : "max-w-md"
+            } rounded-3xl bg-white p-6 shadow-2xl max-h-[90vh] overflow-y-auto`}
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -1092,7 +1091,7 @@ const addToCart = (product, chosenSize = "") => {
               ))}
             </div>
 
-            <div className="h-fit rounded-3xl bg-slate-50 p-5">
+            <div className="sticky bottom-0 bg-white p-5 border-t">
               <h4 className="text-lg font-bold">Захиалгын мэдээлэл</h4>
               <div className="mt-4 space-y-3 text-sm text-slate-600">
                 <div className="flex items-center justify-between">
