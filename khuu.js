@@ -15,7 +15,7 @@ const PRODUCTS = [
     size: ["S", "M", "L", "XL"],
     stock: true,
     image:
-      "assets/hoodie.png",
+      "/assets/hoodie.png",
     description: "Өдөр тутмын minimal загвартай, тав тухтай oversize hoodie.",
   },
   {
