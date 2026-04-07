@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Instagram, Facebook, Mail,ShoppingCart, Search, Trash2, User, LogIn, LogOut, Package, CheckCircle2, X, Menu } from "lucide-react";
-
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,6 +11,8 @@ import hoodieImg from "./assets/hoodie.png";
 import jacketImg from "./assets/jacket.png";
 import tshirtImg from "./assets/tshirt.png";
 import cargoImg from "./assets/cargo.png";
+import logo from "./assets/logo.jpg";
+
 const PRODUCTS = [
   {
     id: 1,
@@ -305,7 +306,10 @@ export default function KhuuBrandWebsite() {
       <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <div>
-            <h1 className="text-2xl font-black tracking-[0.25em]">KHUU</h1>
+            <div className="flex items-center gap-2">
+              <img src={logo} alt="KHUU logo" className="h-8 w-auto" />
+               <span className="text-xl font-black tracking-widest">KHUU</span>
+      </div>
             <p className="text-xs text-slate-500">Minimal streetwear brand</p>
           </div>
 
@@ -461,7 +465,7 @@ export default function KhuuBrandWebsite() {
 
         {/* Instagram */}
         <a
-          href="https://instagram.com/damn.docx"
+          href="https://instagram.com/tamirakhuu"
           target="_blank"
           rel="noopener noreferrer"
           className="rounded-full p-3 transition hover:bg-black hover:text-white"

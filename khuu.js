@@ -11,6 +11,7 @@ import cap from "./src/assets/cap.png";
 import jacket from "./src/assets/jacket.png";
 import tshirt from "./src/assets/tshirt.png";
 import vest from "./src/assets/vest.png";
+import logo from "./assets/logo.png";
 
 
 const PRODUCTS = [
