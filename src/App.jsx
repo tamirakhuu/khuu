@@ -1041,7 +1041,7 @@ const addToCart = (product, chosenSize = "") => {
         ) : cart.length === 0 ? (
           <div className="space-y-4 text-center">
             <Package className="mx-auto h-12 w-12 text-slate-400" />
-            <p className="text-slate-600">Таны сагс хоосон байна.</p>
+            <p className="text-slate-600">Таны сагс хоосон байна</p>
           </div>
         ) : (
           <div className="grid gap-6 lg:grid-cols-[1.5fr_0.9fr]">
@@ -1122,6 +1122,7 @@ const addToCart = (product, chosenSize = "") => {
         )}
       </Modal>
 
+
       <Modal open={checkoutDone} onClose={() => setCheckoutDone(false)}>
         <div className="space-y-4 text-center">
           <CheckCircle2 className="mx-auto h-16 w-16" />
@@ -1141,3 +1142,4 @@ const addToCart = (product, chosenSize = "") => {
       </Modal>
     </div>
   );
+}
