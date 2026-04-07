@@ -131,12 +131,12 @@ function Modal({ open, onClose, children, wide = false }) {
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              onClick={onClose}
-              className="absolute right-4 top-4 rounded-full p-2 text-slate-500 transition hover:bg-slate-100"
-              aria-label="Close"
-            >
-              <X className="h-5 w-5" />
-            </button>
+  onClick={onClose}
+  className="absolute right-3 top-3 z-[60] rounded-full bg-white/95 p-2 text-slate-700 shadow-lg backdrop-blur transition hover:bg-white sm:right-4 sm:top-4"
+  aria-label="Close"
+>
+  <X className="h-5 w-5" />
+</button>
             {children}
           </motion.div>
         </motion.div>
