@@ -32,7 +32,7 @@ const PRODUCTS = [
   },
   {
     id: 3,
-    name: "KHUU Cargo Pants",
+    name: "KHUU Cargo Pans",
     category: "Pants",
     price: 99000,
     size: ["M", "L", "XL"],
