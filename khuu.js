@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import cargoImg from "../khuu/src/assets/cargo.png";
+import cargoImg from "../assets/cargo.png";
 
 const PRODUCTS = [
   {
