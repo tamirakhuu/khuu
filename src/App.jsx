@@ -200,7 +200,12 @@ export default function KhuuBrandWebsite() {
   const openProduct = (product) => {
   setSelectedProduct(product);
   setSelectedSize(product?.size?.[0] || "");
+  setActiveImage(product?.images?.[0] || product?.image || "");
 };
+
+const [activeImage, setActiveImage] = useState("");
+const [zoomOpen, setZoomOpen] = useState(false);
+const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
 
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
@@ -830,17 +835,61 @@ const addToCart = (product, chosenSize = "") => {
   onClose={() => {
     setSelectedProduct(null);
     setSelectedSize("");
+    setActiveImage("");
+    setZoomOpen(false);
   }}
   wide
->        {selectedProduct && (
+>       
+{selectedProduct && (
           <div className="grid gap-6 md:grid-cols-2">
-            <div className="overflow-hidden rounded-3xl bg-slate-100">
-              <img
-                src={selectedProduct.image}
-                alt={selectedProduct.name}
-                className="h-full w-full object-cover"
-              />
-            </div>
+            <div className="grid gap-4 md:grid-cols-[90px_1fr]">
+  <div className="order-2 flex gap-3 md:order-1 md:flex-col">
+    {(selectedProduct.images || [selectedProduct.image]).map((img, index) => (
+      <button
+        key={index}
+        type="button"
+        onClick={() => setActiveImage(img)}
+        className={`overflow-hidden rounded-2xl border-2 bg-slate-100 transition ${
+          activeImage === img
+            ? "border-slate-900"
+            : "border-transparent hover:border-slate-300"
+        }`}
+      >
+        <img
+          src={img}
+          alt={`${selectedProduct.name} ${index + 1}`}
+          className="h-20 w-20 object-cover"
+        />
+      </button>
+    ))}
+  </div>
+
+  <div className="order-1 md:order-2">
+    <div
+      className="group relative overflow-hidden rounded-3xl bg-slate-100"
+      onMouseMove={(e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        setZoomPosition({ x, y });
+      }}
+      onClick={() => setZoomOpen(true)}
+    >
+<img
+  src={activeImage || selectedProduct.image}
+  alt={selectedProduct.name}
+  className="h-[320px] w-full cursor-zoom-in object-cover transition duration-300 group-hover:scale-[1.9] md:h-[520px]"
+  style={{
+    transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
+  }}
+/>
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/45 to-transparent p-4 text-sm text-white opacity-0 transition group-hover:opacity-100">
+        Дарж томруулж харна
+      </div>
+    </div>
+  </div>
+</div>
             <div className="space-y-5">
               <Badge className="rounded-full px-3 py-1">
                 {selectedProduct.category}
@@ -892,7 +941,45 @@ const addToCart = (product, chosenSize = "") => {
           </div>
         )}
       </Modal>
+<Modal open={zoomOpen} onClose={() => setZoomOpen(false)} wide>
+  {selectedProduct && (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-2xl font-bold">{selectedProduct.name}</h3>
+        <p className="text-sm text-slate-500">Томруулсан харагдац</p>
+      </div>
 
+      <div className="overflow-hidden rounded-3xl bg-slate-100">
+        <img
+          src={activeImage || selectedProduct.image}
+          alt={selectedProduct.name}
+          className="max-h-[80vh] w-full object-contain"
+        />
+      </div>
+
+      <div className="flex flex-wrap gap-3">
+        {(selectedProduct.images || [selectedProduct.image]).map((img, index) => (
+          <button
+            key={index}
+            type="button"
+            onClick={() => setActiveImage(img)}
+            className={`overflow-hidden rounded-2xl border-2 ${
+              activeImage === img
+                ? "border-slate-900"
+                : "border-transparent hover:border-slate-300"
+            }`}
+          >
+            <img
+              src={img}
+              alt={`${selectedProduct.name} preview ${index + 1}`}
+              className="h-20 w-20 object-cover"
+            />
+          </button>
+        ))}
+      </div>
+    </div>
+  )}
+</Modal>
       <Modal open={profileOpen} onClose={() => setProfileOpen(false)}>
         {currentUser && (
           <div className="space-y-5">
