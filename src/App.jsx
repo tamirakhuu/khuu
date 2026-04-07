@@ -1,12 +1,27 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Instagram, Facebook, Mail,ShoppingCart, Search, Trash2, User, LogIn, LogOut, Package, CheckCircle2, X, Menu } from "lucide-react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import {
+  Instagram,
+  Facebook,
+  Mail,
+  ShoppingCart,
+  Search,
+  Trash2,
+  User,
+  LogIn,
+  LogOut,
+  Package,
+  CheckCircle2,
+  X,
+  Menu,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import vestImg from"./assets/vest.png";
-import capImg from"./assets/cap.png";
+
+import vestImg from "./assets/vest.png";
+import capImg from "./assets/cap.png";
 import hoodieImg from "./assets/hoodie.png";
 import jacketImg from "./assets/jacket.png";
 import tshirtImg from "./assets/tshirt.png";
@@ -17,7 +32,7 @@ const PRODUCTS = [
   {
     id: 1,
     name: "KHUU Hoodie",
-    category: "Hoodie, Outerwear",
+    category: "Hoodie",
     price: 89000,
     size: ["S", "M", "L", "XL"],
     stock: true,
@@ -31,7 +46,7 @@ const PRODUCTS = [
     price: 49000,
     size: ["S", "M", "L"],
     stock: true,
-    image:tshirtImg,
+    image: tshirtImg,
     description: "Цэвэрхэн хэв маягтай, брендийн өдөр тутмын tee.",
   },
   {
@@ -51,8 +66,8 @@ const PRODUCTS = [
     price: 39000,
     size: ["Free"],
     stock: false,
-    image:capImg,
-    description: "Энгийн, цэвэрхэн logo-той cap.Хэмжээгээ өөрөө тааруулах боломжтой",
+    image: capImg,
+    description: "Энгийн, цэвэрхэн logo-той cap. Хэмжээгээ өөрөө тааруулах боломжтой.",
   },
   {
     id: 5,
@@ -61,7 +76,7 @@ const PRODUCTS = [
     price: 129000,
     size: ["M", "L", "XL"],
     stock: true,
-    image:jacketImg,
+    image: jacketImg,
     description: "Дулаан материалтай, загварлаг teddy.",
   },
   {
@@ -78,11 +93,13 @@ const PRODUCTS = [
 
 const CATEGORIES = ["All", ...new Set(PRODUCTS.map((p) => p.category))];
 
-const formatPrice = (price) => new Intl.NumberFormat("mn-MN").format(price) + "₮";
+const formatPrice = (price) =>
+  new Intl.NumberFormat("mn-MN").format(price) + "₮";
 
 const LS_USERS = "khuu_users";
 const LS_CURRENT_USER = "khuu_current_user";
 const LS_CART_PREFIX = "khuu_cart_";
+const LS_PROFILE_PREFIX = "khuu_profile_";
 
 function readJson(key, fallback) {
   try {
@@ -109,7 +126,9 @@ function Modal({ open, onClose, children, wide = false }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.2 }}
-            className={`relative w-full ${wide ? "max-w-4xl" : "max-w-md"} rounded-3xl bg-white p-6 shadow-2xl`}
+            className={`relative w-full ${
+              wide ? "max-w-4xl" : "max-w-md"
+            } rounded-3xl bg-white p-6 shadow-2xl`}
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -131,13 +150,19 @@ function ProductCard({ product, onView, onAdd }) {
   return (
     <Card className="overflow-hidden rounded-3xl border-0 shadow-md transition hover:-translate-y-1 hover:shadow-xl">
       <div className="aspect-[4/5] overflow-hidden bg-slate-100">
-        <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
+        <img
+          src={product.image}
+          alt={product.name}
+          className="h-full w-full object-cover"
+        />
       </div>
       <CardContent className="space-y-4 p-5">
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-sm text-slate-500">{product.category}</p>
-            <h3 className="text-lg font-semibold text-slate-900">{product.name}</h3>
+            <h3 className="text-lg font-semibold text-slate-900">
+              {product.name}
+            </h3>
           </div>
           <Badge variant="secondary" className="rounded-full px-3 py-1">
             {product.stock ? "Байгаа" : "Дууссан"}
@@ -146,10 +171,18 @@ function ProductCard({ product, onView, onAdd }) {
         <div className="flex items-center justify-between gap-3">
           <p className="text-base font-bold">{formatPrice(product.price)}</p>
           <div className="flex gap-2">
-            <Button variant="outline" className="rounded-2xl" onClick={() => onView(product)}>
+            <Button
+              variant="outline"
+              className="rounded-2xl"
+              onClick={() => onView(product)}
+            >
               Дэлгэрэнгүй
             </Button>
-            <Button className="rounded-2xl" onClick={() => onAdd(product)} disabled={!product.stock}>
+            <Button
+              className="rounded-2xl"
+              onClick={() => onAdd(product)}
+              disabled={!product.stock}
+            >
               Сагслах
             </Button>
           </div>
@@ -172,9 +205,17 @@ export default function KhuuBrandWebsite() {
   const [authOpen, setAuthOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [checkoutDone, setCheckoutDone] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [authError, setAuthError] = useState("");
+
+  const [profileForm, setProfileForm] = useState({ name: "", email: "" });
+  const [profileImage, setProfileImage] = useState("");
+
+  const homeRef = useRef(null);
+  const productsRef = useRef(null);
+  const brandRef = useRef(null);
 
   useEffect(() => {
     const storedUsers = readJson(LS_USERS, []);
@@ -186,10 +227,23 @@ export default function KhuuBrandWebsite() {
   useEffect(() => {
     if (!currentUser) {
       setCart([]);
+      setProfileForm({ name: "", email: "" });
+      setProfileImage("");
       return;
     }
+
     const storedCart = readJson(`${LS_CART_PREFIX}${currentUser.email}`, []);
+    const storedProfile = readJson(
+      `${LS_PROFILE_PREFIX}${currentUser.email}`,
+      null
+    );
+
     setCart(storedCart);
+    setProfileForm({
+      name: storedProfile?.name || currentUser.name || "",
+      email: currentUser.email || "",
+    });
+    setProfileImage(storedProfile?.image || "");
   }, [currentUser]);
 
   useEffect(() => {
@@ -202,20 +256,37 @@ export default function KhuuBrandWebsite() {
 
   useEffect(() => {
     if (currentUser) {
-      localStorage.setItem(`${LS_CART_PREFIX}${currentUser.email}`, JSON.stringify(cart));
+      localStorage.setItem(
+        `${LS_CART_PREFIX}${currentUser.email}`,
+        JSON.stringify(cart)
+      );
     }
   }, [cart, currentUser]);
 
   const filteredProducts = useMemo(() => {
     return PRODUCTS.filter((product) => {
-      const categoryMatch = selectedCategory === "All" || product.category === selectedCategory;
-      const searchMatch = product.name.toLowerCase().includes(search.toLowerCase());
+      const categoryMatch =
+        selectedCategory === "All" || product.category === selectedCategory;
+      const searchMatch = product.name
+        .toLowerCase()
+        .includes(search.toLowerCase());
       return categoryMatch && searchMatch;
     });
   }, [selectedCategory, search]);
 
-  const cartCount = useMemo(() => cart.reduce((sum, item) => sum + item.quantity, 0), [cart]);
-  const totalPrice = useMemo(() => cart.reduce((sum, item) => sum + item.price * item.quantity, 0), [cart]);
+  const cartCount = useMemo(
+    () => cart.reduce((sum, item) => sum + item.quantity, 0),
+    [cart]
+  );
+
+  const totalPrice = useMemo(
+    () => cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
+    [cart]
+  );
+
+  const scrollToSection = (ref) => {
+    ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const addToCart = (product) => {
     if (!currentUser) {
@@ -228,7 +299,9 @@ export default function KhuuBrandWebsite() {
       const found = prev.find((item) => item.id === product.id);
       if (found) {
         return prev.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
         );
       }
       return [...prev, { ...product, quantity: 1 }];
@@ -240,13 +313,16 @@ export default function KhuuBrandWebsite() {
     setCart((prev) =>
       prev
         .map((item) =>
-          item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
+          item.id === id
+            ? { ...item, quantity: Math.max(1, item.quantity + delta) }
+            : item
         )
         .filter((item) => item.quantity > 0)
     );
   };
 
-  const removeFromCart = (id) => setCart((prev) => prev.filter((item) => item.id !== id));
+  const removeFromCart = (id) =>
+    setCart((prev) => prev.filter((item) => item.id !== id));
 
   const handleAuth = (e) => {
     e.preventDefault();
@@ -263,20 +339,41 @@ export default function KhuuBrandWebsite() {
         setAuthError("Энэ имэйл бүртгэлтэй байна.");
         return;
       }
-      const newUser = { name: form.name, email: form.email, password: form.password };
+
+      const newUser = {
+        name: form.name,
+        email: form.email,
+        password: form.password,
+      };
+
       const nextUsers = [...users, newUser];
       setUsers(nextUsers);
       setCurrentUser(newUser);
+      setProfileForm({ name: newUser.name, email: newUser.email });
+      setProfileImage("");
+      localStorage.setItem(
+        `${LS_PROFILE_PREFIX}${newUser.email}`,
+        JSON.stringify({
+          name: newUser.name,
+          email: newUser.email,
+          image: "",
+        })
+      );
+
       setForm({ name: "", email: "", password: "" });
       setAuthOpen(false);
       return;
     }
 
-    const user = users.find((u) => u.email === form.email && u.password === form.password);
+    const user = users.find(
+      (u) => u.email === form.email && u.password === form.password
+    );
+
     if (!user) {
       setAuthError("Имэйл эсвэл нууц үг буруу байна.");
       return;
     }
+
     setCurrentUser(user);
     setForm({ name: "", email: "", password: "" });
     setAuthOpen(false);
@@ -284,55 +381,172 @@ export default function KhuuBrandWebsite() {
 
   const handleDeleteAccount = () => {
     if (!currentUser) return;
+
     const nextUsers = users.filter((u) => u.email !== currentUser.email);
     setUsers(nextUsers);
     localStorage.removeItem(`${LS_CART_PREFIX}${currentUser.email}`);
+    localStorage.removeItem(`${LS_PROFILE_PREFIX}${currentUser.email}`);
     setCurrentUser(null);
     setCart([]);
     setCartOpen(false);
+    setProfileOpen(false);
   };
 
   const confirmOrder = () => {
     if (!cart.length) return;
+
     setCart([]);
     if (currentUser) {
-      localStorage.setItem(`${LS_CART_PREFIX}${currentUser.email}`, JSON.stringify([]));
+      localStorage.setItem(
+        `${LS_CART_PREFIX}${currentUser.email}`,
+        JSON.stringify([])
+      );
     }
     setCheckoutDone(true);
+  };
+
+  const handleProfileImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file || !currentUser) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const nextImage = reader.result?.toString() || "";
+      setProfileImage(nextImage);
+
+      localStorage.setItem(
+        `${LS_PROFILE_PREFIX}${currentUser.email}`,
+        JSON.stringify({
+          name: profileForm.name || currentUser.name,
+          email: currentUser.email,
+          image: nextImage,
+        })
+      );
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const saveProfile = () => {
+    if (!currentUser) return;
+
+    const trimmedName = profileForm.name.trim() || currentUser.name;
+
+    const updatedUser = {
+      ...currentUser,
+      name: trimmedName,
+    };
+
+    const nextUsers = users.map((u) =>
+      u.email === currentUser.email ? updatedUser : u
+    );
+
+    setUsers(nextUsers);
+    setCurrentUser(updatedUser);
+
+    localStorage.setItem(
+      `${LS_PROFILE_PREFIX}${updatedUser.email}`,
+      JSON.stringify({
+        name: trimmedName,
+        email: updatedUser.email,
+        image: profileImage,
+      })
+    );
+
+    setProfileOpen(false);
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    setCart([]);
+    setMobileMenu(false);
+    setProfileOpen(false);
   };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <div>
+          <div className="cursor-pointer" onClick={() => scrollToSection(homeRef)}>
             <div className="flex items-center gap-2">
               <img src={logo} alt="KHUU logo" className="h-8 w-auto" />
-               <span className="text-xl font-black tracking-widest">KHUU</span>
-      </div>
+              <span className="text-xl font-black tracking-widest">KHUU</span>
+            </div>
             <p className="text-xs text-slate-500">Minimal streetwear brand</p>
           </div>
 
           <nav className="hidden items-center gap-3 md:flex">
-            <Button variant="ghost" className="rounded-2xl">Нүүр</Button>
-            <Button variant="ghost" className="rounded-2xl">Бүтээгдэхүүн</Button>
-            <Button variant="ghost" className="rounded-2xl">Бренд</Button>
+            <Button
+              variant="ghost"
+              className="rounded-2xl"
+              onClick={() => scrollToSection(homeRef)}
+            >
+              Нүүр
+            </Button>
+            <Button
+              variant="ghost"
+              className="rounded-2xl"
+              onClick={() => scrollToSection(productsRef)}
+            >
+              Бүтээгдэхүүн
+            </Button>
+            <Button
+              variant="ghost"
+              className="rounded-2xl"
+              onClick={() => scrollToSection(brandRef)}
+            >
+              Бренд
+            </Button>
+
             {!currentUser ? (
-              <Button className="rounded-2xl" onClick={() => { setAuthMode("login"); setAuthOpen(true); }}>
+              <Button
+                className="rounded-2xl"
+                onClick={() => {
+                  setAuthMode("login");
+                  setAuthOpen(true);
+                }}
+              >
                 <LogIn className="mr-2 h-4 w-4" /> Нэвтрэх
               </Button>
             ) : (
               <div className="flex items-center gap-2">
-                <Badge className="rounded-full px-3 py-2">{currentUser.name}</Badge>
-                <Button variant="outline" className="rounded-2xl" onClick={() => setCurrentUser(null)}>
+                <button
+                  onClick={() => setProfileOpen(true)}
+                  className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 transition hover:bg-slate-50"
+                >
+                  {profileImage ? (
+                    <img
+                      src={profileImage}
+                      alt={currentUser.name}
+                      className="h-8 w-8 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white">
+                      {(currentUser.name || "U").charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <span className="text-sm font-medium">{currentUser.name}</span>
+                </button>
+
+                <Button
+                  variant="outline"
+                  className="rounded-2xl"
+                  onClick={handleLogout}
+                >
                   <LogOut className="mr-2 h-4 w-4" /> Гарах
                 </Button>
               </div>
             )}
-            <Button variant="outline" className="relative rounded-2xl" onClick={() => setCartOpen(true)}>
+
+            <Button
+              variant="outline"
+              className="relative rounded-2xl"
+              onClick={() => setCartOpen(true)}
+            >
               <ShoppingCart className="mr-2 h-4 w-4" /> Сагс
               {cartCount > 0 && (
-                <span className="ml-1 rounded-full bg-slate-900 px-2 py-0.5 text-xs text-white">{cartCount}</span>
+                <span className="ml-1 rounded-full bg-slate-900 px-2 py-0.5 text-xs text-white">
+                  {cartCount}
+                </span>
               )}
             </Button>
           </nav>
@@ -355,19 +569,94 @@ export default function KhuuBrandWebsite() {
               className="overflow-hidden border-t bg-white md:hidden"
             >
               <div className="space-y-3 px-4 py-4">
+                <Button
+                  variant="ghost"
+                  className="w-full rounded-2xl justify-start"
+                  onClick={() => {
+                    scrollToSection(homeRef);
+                    setMobileMenu(false);
+                  }}
+                >
+                  Нүүр
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="w-full rounded-2xl justify-start"
+                  onClick={() => {
+                    scrollToSection(productsRef);
+                    setMobileMenu(false);
+                  }}
+                >
+                  Бүтээгдэхүүн
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="w-full rounded-2xl justify-start"
+                  onClick={() => {
+                    scrollToSection(brandRef);
+                    setMobileMenu(false);
+                  }}
+                >
+                  Бренд
+                </Button>
+
                 {!currentUser ? (
-                  <Button className="w-full rounded-2xl" onClick={() => { setAuthMode("login"); setAuthOpen(true); setMobileMenu(false); }}>
+                  <Button
+                    className="w-full rounded-2xl"
+                    onClick={() => {
+                      setAuthMode("login");
+                      setAuthOpen(true);
+                      setMobileMenu(false);
+                    }}
+                  >
                     Нэвтрэх
                   </Button>
                 ) : (
                   <>
-                    <div className="rounded-2xl bg-slate-100 p-3 text-sm">Сайн байна уу, {currentUser.name}</div>
-                    <Button variant="outline" className="w-full rounded-2xl" onClick={() => { setCurrentUser(null); setMobileMenu(false); }}>
+                    <button
+                      onClick={() => {
+                        setProfileOpen(true);
+                        setMobileMenu(false);
+                      }}
+                      className="flex w-full items-center gap-3 rounded-2xl bg-slate-100 p-3 text-left text-sm transition hover:bg-slate-200"
+                    >
+                      {profileImage ? (
+                        <img
+                          src={profileImage}
+                          alt={currentUser.name}
+                          className="h-10 w-10 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white">
+                          {(currentUser.name || "U").charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <div>
+                        <div className="font-medium">{currentUser.name}</div>
+                        <div className="text-xs text-slate-500">
+                          Профайл харах
+                        </div>
+                      </div>
+                    </button>
+
+                    <Button
+                      variant="outline"
+                      className="w-full rounded-2xl"
+                      onClick={handleLogout}
+                    >
                       Гарах
                     </Button>
                   </>
                 )}
-                <Button variant="outline" className="w-full rounded-2xl" onClick={() => { setCartOpen(true); setMobileMenu(false); }}>
+
+                <Button
+                  variant="outline"
+                  className="w-full rounded-2xl"
+                  onClick={() => {
+                    setCartOpen(true);
+                    setMobileMenu(false);
+                  }}
+                >
                   Сагс ({cartCount})
                 </Button>
               </div>
@@ -377,18 +666,33 @@ export default function KhuuBrandWebsite() {
       </header>
 
       <main>
-        <section className="mx-auto grid max-w-7xl items-center gap-8 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-16">
+        <section
+          ref={homeRef}
+          className="mx-auto grid max-w-7xl items-center gap-8 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-16"
+        >
           <div className="space-y-6">
             <Badge className="rounded-full px-4 py-2">Онлайн захиалга</Badge>
             <h2 className="text-4xl font-black leading-tight sm:text-5xl">
               KHUU brand-ийн онлайн дэлгүүр
             </h2>
             <p className="max-w-xl text-base leading-7 text-slate-600 sm:text-lg">
-              Бүтээгдэхүүнээ танилцуулж, хэрэглэгчдээс захиалга авах энгийн, ойлгомжтой, responsive веб сайт.
+              Бүтээгдэхүүнээ танилцуулж, хэрэглэгчдээс захиалга авах энгийн,
+              ойлгомжтой, responsive веб сайт.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Button className="rounded-2xl px-6">Shop now</Button>
-              <Button variant="outline" className="rounded-2xl px-6">Collection</Button>
+              <Button
+                className="rounded-2xl px-6"
+                onClick={() => scrollToSection(productsRef)}
+              >
+                Shop now
+              </Button>
+              <Button
+                variant="outline"
+                className="rounded-2xl px-6"
+                onClick={() => scrollToSection(brandRef)}
+              >
+                Collection
+              </Button>
             </div>
           </div>
 
@@ -427,11 +731,16 @@ export default function KhuuBrandWebsite() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
+        <section
+          ref={productsRef}
+          className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8"
+        >
           <div className="mb-6 flex items-center justify-between">
             <div>
               <h3 className="text-2xl font-bold">Бүтээгдэхүүнүүд</h3>
-              <p className="text-sm text-slate-500">{filteredProducts.length} бүтээгдэхүүн олдлоо</p>
+              <p className="text-sm text-slate-500">
+                {filteredProducts.length} бүтээгдэхүүн олдлоо
+              </p>
             </div>
           </div>
 
@@ -448,74 +757,91 @@ export default function KhuuBrandWebsite() {
         </section>
       </main>
 
-<footer className="border-t bg-white">
-  <div className="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-3 lg:px-8">
-    
-    <div>
-      <h4 className="text-xl font-black tracking-[0.25em]">KHUU</h4>
-      <p className="mt-3 text-sm leading-6 text-slate-600">
-        Онлайн орчинд бүтээгдэхүүн танилцуулах, захиалга авах процессыг хялбарчлах зориулалттай website.
-      </p>
-    </div>
+      <footer ref={brandRef} className="border-t bg-white">
+        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-3 lg:px-8">
+          <div>
+            <h4 className="text-xl font-black tracking-[0.25em]">KHUU</h4>
+            <p className="mt-3 text-sm leading-6 text-slate-600">
+              Онлайн орчинд бүтээгдэхүүн танилцуулах, захиалга авах процессыг
+              хялбарчлах зориулалттай website.
+            </p>
+          </div>
 
-    {/* Холбоо барих */}
-    <div>
-      <h5 className="font-semibold">Холбоо барих</h5>
-      <div className="mt-4 flex items-center gap-4">
+          <div>
+            <h5 className="font-semibold">Брендийн тухай</h5>
+            <p className="mt-3 text-sm leading-6 text-slate-600">
+              Minimal streetwear хэв маягийг өдөр тутмын тав тухтай загвартай
+              хослуулсан KHUU brand.
+            </p>
+          </div>
 
-        {/* Instagram */}
-        <a
-          href="https://instagram.com/tamirakhuu"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="rounded-full p-3 transition hover:bg-black hover:text-white"
-        >
-          <Instagram className="h-5 w-5" />
-        </a>
+          <div>
+            <h5 className="font-semibold">Холбоо барих</h5>
+            <div className="mt-4 flex items-center gap-4">
+              <a
+                href="https://instagram.com/tamirakhuu"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full p-3 transition hover:bg-black hover:text-white"
+              >
+                <Instagram className="h-5 w-5" />
+              </a>
 
-        {/* Facebook */}
-        <a
-          href="https://facebook.com/akultamira"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="rounded-full p-3 transition hover:bg-black hover:text-white"
-        >
-          <Facebook className="h-5 w-5" />
-        </a>
+              <a
+                href="https://facebook.com/akultamira"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full p-3 transition hover:bg-black hover:text-white"
+              >
+                <Facebook className="h-5 w-5" />
+              </a>
 
-        {/* Gmail */}
-        <a
-          href="mailto:tamirakhuu@gmail.com"
-          className="rounded-full p-3 transition hover:bg-black hover:text-white"
-        >
-          <Mail className="h-5 w-5" />
-        </a>
-
-      </div>
-    </div>
-
-  </div>
-</footer>
+              <a
+                href="mailto:tamirakhuu@gmail.com"
+                className="rounded-full p-3 transition hover:bg-black hover:text-white"
+              >
+                <Mail className="h-5 w-5" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
 
       <Modal open={!!selectedProduct} onClose={() => setSelectedProduct(null)} wide>
         {selectedProduct && (
           <div className="grid gap-6 md:grid-cols-2">
             <div className="overflow-hidden rounded-3xl bg-slate-100">
-              <img src={selectedProduct.image} alt={selectedProduct.name} className="h-full w-full object-cover" />
+              <img
+                src={selectedProduct.image}
+                alt={selectedProduct.name}
+                className="h-full w-full object-cover"
+              />
             </div>
             <div className="space-y-5">
-              <Badge className="rounded-full px-3 py-1">{selectedProduct.category}</Badge>
+              <Badge className="rounded-full px-3 py-1">
+                {selectedProduct.category}
+              </Badge>
               <h3 className="text-3xl font-black">{selectedProduct.name}</h3>
               <p className="text-slate-600">{selectedProduct.description}</p>
               <div className="space-y-2 rounded-3xl bg-slate-50 p-4">
-                <p><span className="font-semibold">Үнэ:</span> {formatPrice(selectedProduct.price)}</p>
-                <p><span className="font-semibold">Хэмжээ:</span> {selectedProduct.size.join(", ")}</p>
+                <p>
+                  <span className="font-semibold">Үнэ:</span>{" "}
+                  {formatPrice(selectedProduct.price)}
+                </p>
+                <p>
+                  <span className="font-semibold">Хэмжээ:</span>{" "}
+                  {selectedProduct.size.join(", ")}
+                </p>
                 <p>
                   <span className="font-semibold">Барааны төлөв:</span>{" "}
                   {selectedProduct.stock ? "Байгаа" : "Одоогоор дууссан"}
                 </p>
               </div>
-              <Button className="rounded-2xl" disabled={!selectedProduct.stock} onClick={() => addToCart(selectedProduct)}>
+              <Button
+                className="rounded-2xl"
+                disabled={!selectedProduct.stock}
+                onClick={() => addToCart(selectedProduct)}
+              >
                 Сагсанд нэмэх
               </Button>
             </div>
@@ -523,9 +849,75 @@ export default function KhuuBrandWebsite() {
         )}
       </Modal>
 
+      <Modal open={profileOpen} onClose={() => setProfileOpen(false)}>
+        {currentUser && (
+          <div className="space-y-5">
+            <div className="flex items-center gap-3">
+              <User className="h-6 w-6" />
+              <h3 className="text-2xl font-bold">Миний профайл</h3>
+            </div>
+
+            <div className="flex flex-col items-center gap-4">
+              {profileImage ? (
+                <img
+                  src={profileImage}
+                  alt="Profile"
+                  className="h-24 w-24 rounded-full object-cover ring-4 ring-slate-100"
+                />
+              ) : (
+                <div className="flex h-24 w-24 items-center justify-center rounded-full bg-slate-900 text-3xl font-bold text-white">
+                  {(profileForm.name || currentUser.name || "U")
+                    .charAt(0)
+                    .toUpperCase()}
+                </div>
+              )}
+
+              <label className="cursor-pointer rounded-2xl border border-slate-200 px-4 py-2 text-sm font-medium transition hover:bg-slate-50">
+                Зураг сонгох
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleProfileImageChange}
+                />
+              </label>
+            </div>
+
+            <div className="space-y-4">
+              <Input
+                className="h-11 rounded-2xl"
+                placeholder="Нэр"
+                value={profileForm.name}
+                onChange={(e) =>
+                  setProfileForm((prev) => ({
+                    ...prev,
+                    name: e.target.value,
+                  }))
+                }
+              />
+              <Input
+                className="h-11 rounded-2xl"
+                placeholder="Имэйл"
+                type="email"
+                value={profileForm.email}
+                disabled
+              />
+            </div>
+
+            <Button className="h-11 w-full rounded-2xl" onClick={saveProfile}>
+              Хадгалах
+            </Button>
+          </div>
+        )}
+      </Modal>
+
       <Modal open={authOpen} onClose={() => setAuthOpen(false)}>
         <div className="mb-5 flex items-center gap-3">
-          {authMode === "login" ? <LogIn className="h-6 w-6" /> : <User className="h-6 w-6" />}
+          {authMode === "login" ? (
+            <LogIn className="h-6 w-6" />
+          ) : (
+            <User className="h-6 w-6" />
+          )}
           <h3 className="text-2xl font-bold">
             {authMode === "login" ? "Нэвтрэх" : "Бүртгүүлэх"}
           </h3>
@@ -540,6 +932,7 @@ export default function KhuuBrandWebsite() {
               onChange={(e) => setForm({ ...form, name: e.target.value })}
             />
           )}
+
           <Input
             className="h-11 rounded-2xl"
             placeholder="Имэйл"
@@ -547,6 +940,7 @@ export default function KhuuBrandWebsite() {
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
           />
+
           <Input
             className="h-11 rounded-2xl"
             placeholder="Нууц үг"
@@ -565,8 +959,12 @@ export default function KhuuBrandWebsite() {
         <div className="mt-4 text-sm text-slate-600">
           {authMode === "login" ? "Шинэ хэрэглэгч үү?" : "Бүртгэлтэй юу?"}{" "}
           <button
+            type="button"
             className="font-semibold text-slate-900 underline"
-            onClick={() => { setAuthMode(authMode === "login" ? "register" : "login"); setAuthError(""); }}
+            onClick={() => {
+              setAuthMode(authMode === "login" ? "register" : "login");
+              setAuthError("");
+            }}
           >
             {authMode === "login" ? "Бүртгүүлэх" : "Нэвтрэх"}
           </button>
@@ -581,8 +979,17 @@ export default function KhuuBrandWebsite() {
 
         {!currentUser ? (
           <div className="space-y-4 text-center">
-            <p className="text-slate-600">Сагс ашиглахын тулд эхлээд нэвтэрнэ үү.</p>
-            <Button className="rounded-2xl" onClick={() => { setCartOpen(false); setAuthMode("login"); setAuthOpen(true); }}>
+            <p className="text-slate-600">
+              Сагс ашиглахын тулд эхлээд нэвтэрнэ үү.
+            </p>
+            <Button
+              className="rounded-2xl"
+              onClick={() => {
+                setCartOpen(false);
+                setAuthMode("login");
+                setAuthOpen(true);
+              }}
+            >
               Нэвтрэх
             </Button>
           </div>
@@ -595,23 +1002,44 @@ export default function KhuuBrandWebsite() {
           <div className="grid gap-6 lg:grid-cols-[1.5fr_0.9fr]">
             <div className="space-y-4">
               {cart.map((item) => (
-                <div key={item.id} className="flex flex-col gap-4 rounded-3xl border border-slate-200 p-4 sm:flex-row sm:items-center">
-                  <img src={item.image} alt={item.name} className="h-24 w-24 rounded-2xl object-cover" />
+                <div
+                  key={item.id}
+                  className="flex flex-col gap-4 rounded-3xl border border-slate-200 p-4 sm:flex-row sm:items-center"
+                >
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="h-24 w-24 rounded-2xl object-cover"
+                  />
                   <div className="flex-1">
                     <h4 className="font-semibold">{item.name}</h4>
                     <p className="text-sm text-slate-500">{item.category}</p>
                     <p className="mt-1 font-bold">{formatPrice(item.price)}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button variant="outline" className="rounded-xl" onClick={() => changeQuantity(item.id, -1)}>
+                    <Button
+                      variant="outline"
+                      className="rounded-xl"
+                      onClick={() => changeQuantity(item.id, -1)}
+                    >
                       -
                     </Button>
-                    <span className="min-w-8 text-center font-semibold">{item.quantity}</span>
-                    <Button variant="outline" className="rounded-xl" onClick={() => changeQuantity(item.id, 1)}>
+                    <span className="min-w-8 text-center font-semibold">
+                      {item.quantity}
+                    </span>
+                    <Button
+                      variant="outline"
+                      className="rounded-xl"
+                      onClick={() => changeQuantity(item.id, 1)}
+                    >
                       +
                     </Button>
                   </div>
-                  <Button variant="ghost" className="rounded-xl" onClick={() => removeFromCart(item.id)}>
+                  <Button
+                    variant="ghost"
+                    className="rounded-xl"
+                    onClick={() => removeFromCart(item.id)}
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
@@ -630,10 +1058,17 @@ export default function KhuuBrandWebsite() {
                   <span>{formatPrice(totalPrice)}</span>
                 </div>
               </div>
-              <Button className="mt-5 h-11 w-full rounded-2xl" onClick={confirmOrder}>
+              <Button
+                className="mt-5 h-11 w-full rounded-2xl"
+                onClick={confirmOrder}
+              >
                 Захиалга баталгаажуулах
               </Button>
-              <Button variant="outline" className="mt-3 h-11 w-full rounded-2xl" onClick={handleDeleteAccount}>
+              <Button
+                variant="outline"
+                className="mt-3 h-11 w-full rounded-2xl"
+                onClick={handleDeleteAccount}
+              >
                 Бүртгэл устгах
               </Button>
             </div>
@@ -644,11 +1079,16 @@ export default function KhuuBrandWebsite() {
       <Modal open={checkoutDone} onClose={() => setCheckoutDone(false)}>
         <div className="space-y-4 text-center">
           <CheckCircle2 className="mx-auto h-16 w-16" />
-          <h3 className="text-2xl font-bold">Захиалга амжилттай баталгаажлаа</h3>
+          <h3 className="text-2xl font-bold">
+            Захиалга амжилттай баталгаажлаа
+          </h3>
           <p className="text-slate-600">
             Таны захиалгыг хүлээн авлаа. Удахгүй холбогдох болно.
           </p>
-          <Button className="rounded-2xl" onClick={() => setCheckoutDone(false)}>
+          <Button
+            className="rounded-2xl"
+            onClick={() => setCheckoutDone(false)}
+          >
             Ойлголоо
           </Button>
         </div>
