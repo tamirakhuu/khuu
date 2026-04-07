@@ -37,7 +37,7 @@ const PRODUCTS = [
     size: ["M", "L", "XL"],
     stock: true,
     image:
-      "assets/cargo.png",
+      "src/assets/cargo.png",
     description: "Streetwear хэв маягтай олон халаастай cargo өмд.",
   },
   {
