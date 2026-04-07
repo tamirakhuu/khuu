@@ -15,7 +15,7 @@ const PRODUCTS = [
     size: ["S", "M", "L", "XL"],
     stock: true,
     image:
-      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1200&q=80",
+      "assets/hoodie.png",
     description: "Өдөр тутмын minimal загвартай, тав тухтай oversize hoodie.",
   },
   {
@@ -48,7 +48,7 @@ const PRODUCTS = [
     size: ["Free"],
     stock: false,
     image:
-      "https://images.unsplash.com/photo-1521369909029-2afed882baee?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1521369909029-2afed88e2baee?auto=format&fit=crop&w=1200&q=80",
     description: "Энгийн, цэвэрхэн logo-той cap.",
   },
   {
