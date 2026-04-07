@@ -1155,4 +1155,3 @@ const addToCart = (product, chosenSize = "") => {
       </Modal>
     </div>
   );
-}
