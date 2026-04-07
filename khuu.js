@@ -5,8 +5,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import cargo from "../assets/cargo.png";
-import hoodie from "./assets/hoodie.png";
+import cargo from "./src/assets/cargo.png";
+import hoodie from "./src/assets/hoodie.png";
+import cap from "./src/assets/cap.png";
+import jacket from "./src/assets/jacket.png";
+import tshirt from "./src/assets/tshirt.png";
+import vest from "./src/assets/vest.png";
 
 
 const PRODUCTS = [
@@ -27,13 +31,12 @@ const PRODUCTS = [
     price: 49000,
     size: ["S", "M", "L"],
     stock: true,
-    image:
-      "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=1200&q=80",
+    image: tshirt,
     description: "Цэвэрхэн хэв маягтай, брендийн өдөр тутмын tee.",
   },
   {
     id: 3,
-    name: "KHUU Cargo Pans",
+    name: "KHUU Cargo Pants",
     category: "Pants",
     price: 99000,
     size: ["M", "L", "XL"],
@@ -47,9 +50,8 @@ const PRODUCTS = [
     category: "Accessories",
     price: 39000,
     size: ["Free"],
-    stock: false,
-    image:
-      "https://images.unsplash.com/photo-1521369909029-2afed88e2baee?auto=format&fit=crop&w=1200&q=80",
+    stock: true,
+    image: cap,
     description: "Энгийн, цэвэрхэн logo-той cap.",
   },
   {
@@ -59,20 +61,18 @@ const PRODUCTS = [
     price: 129000,
     size: ["M", "L", "XL"],
     stock: true,
-    image:
-      "https://images.unsplash.com/photo-1548883354-94bcfe321cbb?auto=format&fit=crop&w=1200&q=80",
+    image: jacket,
     description: "Салхины хамгаалалттай, хөнгөн материалтай хүрэм.",
   },
   {
     id: 6,
-    name: "KHUU Basic Shorts",
-    category: "Pants",
-    price: 59000,
+    name: "KHUU Vest",
+    category: "Outerwear",
+    price: 119000,
     size: ["S", "M", "L"],
     stock: true,
-    image:
-      "https://images.unsplash.com/photo-1506629905607-d9c297d87f38?auto=format&fit=crop&w=1200&q=80",
-    description: "Зуны улиралд тохирсон comfy short.",
+    image: vest,
+    description: "Лого бүхий minimal vest.",
   },
 ];
 

@@ -11,6 +11,7 @@ import capImg from"./assets/cap.png";
 import hoodieImg from "./assets/hoodie.png";
 import jacketImg from "./assets/jacket.png";
 import tshirtImg from "./assets/tshirt.png";
+import cargoImg from "./assets/cargo.png";
 const PRODUCTS = [
   {
     id: 1,
@@ -39,8 +40,7 @@ const PRODUCTS = [
     price: 99000,
     size: ["M", "L", "XL"],
     stock: true,
-    image:
-      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=80",
+    image: cargoImg,
     description: "Streetwear хэв маягтай олон халаастай cargo өмд.",
   },
   {
