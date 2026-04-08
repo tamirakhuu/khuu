@@ -47,7 +47,7 @@ const PRODUCTS = [
     size: ["S", "M", "L"],
     stock: true,
     image: tshirtImg,
-    description: "Цэвэрхэн хэв маягтай, брендийн өдөр тутмын tee.",
+    description: "Минималист хэв маягтай, өдөр тутмын футболк.",
   },
   {
     id: 3,
@@ -57,7 +57,7 @@ const PRODUCTS = [
     size: ["M", "L", "XL"],
     stock: true,
     image: cargoImg,
-    description: "Streetwear хэв маягтай олон халаастай cargo өмд.",
+    description: "Сул, хэв маягтай олон халаастай cargo өмд.",
   },
   {
     id: 4,
@@ -77,7 +77,7 @@ const PRODUCTS = [
     size: ["M", "L", "XL"],
     stock: true,
     image: jacketImg,
-    description: "Дулаан материалтай, загварлаг teddy.",
+    description: "Дулаан материалтай, загварлаг хүрэм.",
   },
   {
     id: 6,
@@ -784,8 +784,8 @@ const addToCart = (product, chosenSize = "") => {
           <div>
             <h4 className="text-xl font-black tracking-[0.25em]">KHUU</h4>
             <p className="mt-3 text-sm leading-6 text-slate-600">
-              Онлайн орчинд бүтээгдэхүүн танилцуулах, захиалга авах процессыг
-              хялбарчлах зориулалттай website.
+              Онлайн орчинд бүтээгдэхүүн танилцуулах, захиалга авах боломжийг
+              хялбарчлав.
             </p>
           </div>
 
@@ -925,7 +925,7 @@ const addToCart = (product, chosenSize = "") => {
   </p>
 </div>
                 <p>
-                  <span className="font-semibold">Барааны төлөв:</span>{" "}
+                  <span className="font-semibold">Барааны үлдэгдэл:</span>{" "}
                   {selectedProduct.stock ? "Байгаа" : "Одоогоор дууссан"}
                 </p>
               </div>
