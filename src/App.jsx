@@ -33,7 +33,7 @@ const PRODUCTS = [
     id: 1,
     name: "KHUU Hoodie",
     category: "Hoodie",
-    price: 89000,
+    price: 159000,
     size: ["S", "M", "L", "XL"],
     stock: true,
     image: hoodieImg,
@@ -43,7 +43,7 @@ const PRODUCTS = [
     id: 2,
     name: "KHUU Oversize T-Shirt",
     category: "T-Shirt",
-    price: 49000,
+    price: 79000,
     size: ["S", "M", "L"],
     stock: true,
     image: tshirtImg,
@@ -63,7 +63,7 @@ const PRODUCTS = [
     id: 4,
     name: "KHUU Signature Cap",
     category: "Accessories",
-    price: 39000,
+    price: 69000,
     size: ["Free"],
     stock: false,
     image: capImg,
@@ -83,7 +83,7 @@ const PRODUCTS = [
     id: 6,
     name: "KHUU Basic Vest",
     category: "Outerwear",
-    price: 59000,
+    price: 99000,
     size: ["S", "M", "L"],
     stock: true,
     image: vestImg,
@@ -494,7 +494,7 @@ const addToCart = (product, chosenSize = "") => {
               <img src={logo} alt="KHUU logo" className="h-8 w-auto" />
               <span className="text-xl font-black tracking-widest">KHUU</span>
             </div>
-            <p className="text-xs text-slate-500">Minimal streetwear brand</p>
+            <p className="text-xs text-slate-500">MOVE RIGHT</p>
           </div>
 
           <nav className="hidden items-center gap-3 md:flex">
