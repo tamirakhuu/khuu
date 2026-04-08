@@ -696,11 +696,10 @@ const addToCart = (product, chosenSize = "") => {
           <div className="space-y-6">
             <Badge className="rounded-full px-4 py-2">Онлайн захиалга</Badge>
             <h2 className="text-4xl font-black leading-tight sm:text-5xl">
-              KHUU brand-ийн онлайн дэлгүүр
+              KHUU brand
             </h2>
             <p className="max-w-xl text-base leading-7 text-slate-600 sm:text-lg">
-              Бүтээгдэхүүнээ танилцуулж, хэрэглэгчдээс захиалга авах энгийн,
-              ойлгомжтой, responsive веб сайт.
+              Зөв хөдөл.
             </p>
             <div className="flex flex-wrap gap-3">
               <Button
