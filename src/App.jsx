@@ -694,12 +694,12 @@ const addToCart = (product, chosenSize = "") => {
           className="mx-auto grid max-w-7xl items-center gap-8 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-16"
         >
           <div className="space-y-6">
-            <Badge className="rounded-full px-4 py-2">Онлайн захиалга</Badge>
+            <Badge className="rounded-full px-4 py-2">KHUU BRAND</Badge>
             <h2 className="text-4xl font-black leading-tight sm:text-5xl">
-              KHUU brand
+              M O V E  R I G H T
             </h2>
             <p className="max-w-xl text-base leading-7 text-slate-600 sm:text-lg">
-              Зөв хөдөл.
+              Цаг нь ирсэн хүү минь.
             </p>
             <div className="flex flex-wrap gap-3">
               <Button
